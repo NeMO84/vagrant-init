@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# User specific aliases and functions
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ll="ls -alh"
+alias tempssh="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+alias tempscp="scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"

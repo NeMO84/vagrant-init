@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# git branch prompt support
+function git_branch() {
+  if [ -f /usr/bin/local/git ]; then
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+  fi
+}
+function prompt_init ()
+{
+  case $TERM in
+       xterm*|rxvt*)
+           local TITLEBAR='\[\033]0;\u ${NEW_PWD}\007\]'
+            ;;
+       *)
+           local TITLEBAR=""
+            ;;
+      esac
+
+  local UC=$COLOR_YELLOW               # user's color
+  [ $UID -eq "0" ] && UC=$COLOR_RED   # root's color
+
+  export PS1="$TITLEBAR\n\[${UC}\]\u\[${COLOR_LIGHT_GRAY}\]@\[${COLOR_LIGHT_BLUE}\]\h \[${COLOR_LIGHT_PURPLE}\]\${PWD}\[${COLOR_LIGHT_GREEN}\]\$(git_branch) \[${COLOR_BLACK}\]\n\[${COLOR_LIGHT_GREEN}\]→\[${COLOR_NC}\] "
+}
+prompt_init
