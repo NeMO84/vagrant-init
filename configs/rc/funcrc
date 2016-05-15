@@ -2,15 +2,16 @@
 
 # git branch prompt support
 function git_branch() {
-  if [ -f /usr/bin/local/git ]; then
+  if [ -f /usr/bin/git ] || [ -f /usr/bin/local/git ]; then
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
   fi
 }
+
 function prompt_init ()
 {
   case $TERM in
        xterm*|rxvt*)
-           local TITLEBAR='\[\033]0;\u ${NEW_PWD}\007\]'
+           local TITLEBAR="\[\033]0;\u ${NEW_PWD}\007\]"
             ;;
        *)
            local TITLEBAR=""
@@ -20,6 +21,14 @@ function prompt_init ()
   local UC=$COLOR_YELLOW               # user's color
   [ $UID -eq "0" ] && UC=$COLOR_RED   # root's color
 
-  export PS1="$TITLEBAR\n\[${UC}\]\u\[${COLOR_LIGHT_GRAY}\]@\[${COLOR_LIGHT_BLUE}\]\h \[${COLOR_LIGHT_PURPLE}\]\${PWD}\[${COLOR_LIGHT_GREEN}\]\$(git_branch) \[${COLOR_BLACK}\]\n\[${COLOR_LIGHT_GREEN}\]→\[${COLOR_NC}\] "
+  local NAME="\[${UC}\]\u"
+  local ATSYM="\[${COLOR_LIGHT_GRAY}\]@"
+  local HOST="\[${COLOR_LIGHT_BLUE}\]\h"
+  local WORKIN_DIR="\[${COLOR_CYAN}\]\${PWD}"
+  local GIT_INFO="\[${COLOR_LIGHT_GREEN}\]\$(git_branch)"
+  local NEW_LINE="\[${COLOR_BLACK}\]\n"
+  local INPUT_ICON="\[${COLOR_PURPLE}\]$"
+
+  export PS1="$TITLEBAR\n$NAME$ATSYM$WORKIN_DIR$GIT_INFO$NEW_LINE$INPUT_ICON\[${COLOR_NC}\] "
 }
 prompt_init
